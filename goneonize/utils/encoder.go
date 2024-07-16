@@ -12,6 +12,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 import (
+	"go.mau.fi/whatsmeow/store"
 	"go.mau.fi/whatsmeow/types/events"
 )
 
@@ -198,6 +199,19 @@ func EncodeUserInfo(userInfo types.UserInfo) *defproto.UserInfo {
 	}
 	return models
 }
+func EncodeDevice(device store.Device) *defproto.Device {
+	tempDevice := &defproto.Device{
+		PushName:      &device.PushName,
+		Platform:      &device.Platform,
+		BussinessName: &device.BusinessName,
+		Initialized:   &device.Initialized,
+	}
+	if device.ID != nil {
+		tempDevice.JID = EncodeJidProto(*device.ID)
+	}
+	return tempDevice
+}
+
 func EncodeMessageSource(messageSource types.MessageSource) *defproto.MessageSource {
 	return &defproto.MessageSource{
 		Chat:               EncodeJidProto(messageSource.Chat),

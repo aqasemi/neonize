@@ -694,6 +694,31 @@ func Neonize(db *C.char, id *C.char, logLevel *C.char, qrCb C.ptr_to_python_func
 	C.call_c_func(blocking, false)
 }
 
+//export GetDevices
+func GetDevices(db *C.char, logLevel *C.char) C.struct_BytesReturn {
+	dbLog := waLog.Stdout("Database", C.GoString(logLevel), true)
+	container, err := sqlstore.New("sqlite3", fmt.Sprintf("file:%s?_foreign_keys=on", C.GoString(db)), dbLog)
+	if err != nil {
+		panic(err)
+	}
+	deviceStore, err := container.GetAllDevices()
+	if err != nil {
+		panic(err)
+	}
+	devices := []*store.Device{}
+	for _, device := range deviceStore {
+		devices = append(devices, device)
+	}
+	return_ := defproto.GetDevicesReturnFunction{}
+	return_.Devices = devices
+
+	return_buf, err := proto.Marshal(&return_)
+	if err != nil {
+		panic(err)
+	}
+	return ReturnBytes(return_buf)
+}
+
 //export Disconnect
 func Disconnect(id *C.char) {
 	clients[C.GoString(id)].Disconnect()
