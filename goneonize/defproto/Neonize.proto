@@ -211,6 +211,11 @@ message UploadReturnFunction {
     optional string Error = 2;
 }
 
+message GetDevicesReturnFunction {
+    repeated Device Devices = 1;
+    optional string Error = 2;
+}
+
 message SetGroupPhotoReturnFunction {
     required string PictureID = 1;
     optional string Error = 2;
