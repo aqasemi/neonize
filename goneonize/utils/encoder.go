@@ -199,7 +199,7 @@ func EncodeUserInfo(userInfo types.UserInfo) *defproto.UserInfo {
 	}
 	return models
 }
-func EncodeDevice(device store.Device) *defproto.Device {
+func EncodeDevice(device *store.Device) *defproto.Device {
 	tempDevice := &defproto.Device{
 		PushName:      &device.PushName,
 		Platform:      &device.Platform,

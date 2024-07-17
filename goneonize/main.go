@@ -705,9 +705,10 @@ func GetDevices(db *C.char, logLevel *C.char) C.struct_BytesReturn {
 	if err != nil {
 		panic(err)
 	}
-	devices := []*store.Device{}
+	devices := []*defproto.Device{}
 	for _, device := range deviceStore {
-		devices = append(devices, device)
+		tempDevice := utils.EncodeDevice(device)
+		devices = append(devices, tempDevice)
 	}
 	return_ := defproto.GetDevicesReturnFunction{}
 	return_.Devices = devices
