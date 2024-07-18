@@ -3,8 +3,7 @@ package utils
 import (
 	"C"
 
-	// defproto "github.com/krypton-byte/neonize/defproto"
-	defproto "github.com/krypton-byte/neonize/defproto"
+	defproto "github.com/aqasemi/neonize/defproto"
 	"go.mau.fi/whatsmeow"
 	waBinary "go.mau.fi/whatsmeow/binary"
 	waProto "go.mau.fi/whatsmeow/binary/proto"

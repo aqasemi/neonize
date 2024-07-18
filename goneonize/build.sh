@@ -5,7 +5,7 @@ if [[ -f defproto ]]
 then
 rm -rf defproto
 fi
-mv -f github.com/krypton-byte/neonize/defproto/* defproto
+mv -f github.com/aqasemi/neonize/defproto/* defproto
 rm -rf github.com/
 GOOS=linux GOARCH=amd64 CGO_ENABLED=1 go build -buildmode=c-shared -ldflags=-s -o neonize.so main.go
 mv neonize.so ..
