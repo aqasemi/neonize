@@ -3,8 +3,8 @@ package main
 import (
 	"C"
 
-	"github.com/krypton-byte/neonize/defproto"
-	"github.com/krypton-byte/neonize/utils"
+	"github.com/aqasemi/neonize/defproto"
+	"github.com/aqasemi/neonize/utils"
 	"google.golang.org/protobuf/proto"
 )
 import "go.mau.fi/whatsmeow/store"

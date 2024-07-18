@@ -3,7 +3,7 @@ package utils
 import (
 	"time"
 
-	"github.com/krypton-byte/neonize/defproto"
+	"github.com/aqasemi/neonize/defproto"
 	"go.mau.fi/whatsmeow"
 	"go.mau.fi/whatsmeow/appstate"
 	waVname "go.mau.fi/whatsmeow/proto/waVnameCert"

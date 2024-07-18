@@ -1,4 +1,4 @@
-module github.com/krypton-byte/neonize
+module github.com/aqasemi/neonize
 
 go 1.21.5
 

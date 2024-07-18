@@ -16,8 +16,8 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/krypton-byte/neonize/defproto"
-	"github.com/krypton-byte/neonize/utils"
+	"github.com/aqasemi/neonize/defproto"
+	"github.com/aqasemi/neonize/utils"
 	_ "github.com/mattn/go-sqlite3"
 	"go.mau.fi/whatsmeow"
 	"go.mau.fi/whatsmeow/store"
