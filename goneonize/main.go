@@ -132,7 +132,7 @@ func SendMessage(id *C.char, JIDByte *C.uchar, JIDSize C.int, messageByte *C.uch
 }
 
 //export Neonize
-func Neonize(db *C.char, id *C.char, JIDByte *C.uchar, JIDSize C.int, logLevel *C.char, qrCb C.ptr_to_python_function_string, logStatus C.ptr_to_python_function_string, event C.ptr_to_python_function_bytes, subscribes *C.uchar, lenSubscriber C.int, blocking C.ptr_to_python_function, devicePropsBuf *C.uchar, devicePropsSize C.int, pairphone *C.uchar, pairphoneSize C.int) { // ,
+func Neonize(db *C.char, id *C.char, JIDByte *C.uchar, JIDSize C.int, logLevel *C.char, qrCb C.ptr_to_python_function_string, logStatus C.ptr_to_python_function_string, event C.ptr_to_python_function_bytes, subscribes *C.uchar, lenSubscriber C.int, blocking C.ptr_to_python_function, devicePropsBuf *C.uchar, devicePropsSize C.int, pairphone *C.uchar, pairphoneSize C.int, newDevice C.bool) {
 	subscribers := map[int]bool{}
 	var deviceProps waProto.DeviceProps
 	var loginStateChan = make(chan bool)
@@ -161,8 +161,13 @@ func Neonize(db *C.char, id *C.char, JIDByte *C.uchar, JIDSize C.int, logLevel *
 		}
 		deviceStore, err_device = container.GetDevice(utils.DecodeJidProto(&JID))
 	} else {
-		deviceStore, err_device = container.GetFirstDevice()
+		if newDevice {
+			deviceStore, err_device = container.NewDevice(), nil
+		} else {
+			deviceStore, err_device = container.GetFirstDevice()
+		}
 	}
+
 	if err_device != nil {
 		panic(err)
 	}

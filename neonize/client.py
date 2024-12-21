@@ -353,6 +353,7 @@ class NewClient:
         jid: Optional[JID] = None,
         props: Optional[DeviceProps] = None,
         uuid: Optional[str] = None,
+        new_client: bool = False,
     ):
         """Initializes a new client instance.
 
@@ -370,6 +371,7 @@ class NewClient:
         self.device_props = props
         self.jid = jid
         self.uuid = ((jid.User if jid else None) or uuid or name).encode()
+        self.new_client = new_client
         self.__client = gocode
         self.event = Event(self)
         self.blocking = self.event.blocking
@@ -2466,6 +2468,7 @@ class NewClient:
             len(deviceprops),
             payload,
             len(payload),
+            self.new_client,
         )
 
     def get_message_for_retry(
@@ -2563,6 +2566,7 @@ class NewClient:
             len(deviceprops),
             b"",
             0,
+            self.new_client,
         )
 
     def disconnect(self) -> None:
