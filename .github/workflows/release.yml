@@ -79,7 +79,6 @@ jobs:
         pip install wheel
     - name: build
       run: |
-        poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
         mkdir LIBS
         export CGO_ENABLED=1
         #AMD64
@@ -114,7 +113,6 @@ jobs:
         poetry build
         python3 repack.py
         mv neonize/*.so LIBS
-        poetry publish
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with: 
@@ -143,7 +141,6 @@ jobs:
         pip install wheel
     - name: build
       run: |
-        poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
         mkdir LIBS
         #AMD64/X86_64
         export CGO_ENABLED=1
@@ -176,7 +173,6 @@ jobs:
         poetry build
         python3 repack.py
         mv neonize/*.so LIBS
-        poetry publish
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
@@ -202,7 +198,6 @@ jobs:
         pip install wheel
     - name: build
       run: |
-        poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
         mkdir LIBS
         export PATH="/Users/runner/.local/bin:$PATH"
         # Set necessary environment variables for building on Darwin
@@ -228,7 +223,6 @@ jobs:
         poetry build
         python3 repack.py
         mv neonize/*.dylib LIBS/
-        poetry publish
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with: 
@@ -258,12 +252,3 @@ jobs:
     - uses: actions/setup-python@v4
       with:
         python-version: "3.11"
-    - name: Install Poetry
-      run: |
-        rm -rf sharedlib
-        curl -sSL https://install.python-poetry.org | python - -y
-    - name: Publish
-      run: |
-        poetry version ${{ github.event.inputs.version }}
-        poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
-        poetry build && poetry publish
