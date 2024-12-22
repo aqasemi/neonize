@@ -2619,7 +2619,7 @@ class ClientFactory:
         return self.get_all_devices_from_db(self.database_name)
 
     def new_client(
-        self, jid: JID = None, uuid: str = None, props: Optional[DeviceProps] = None
+        self, jid: JID = None, uuid: str = None, props: Optional[DeviceProps] = None, new_client: bool = False
     ) -> NewClient:
         """
         This function creates a new instance of the client. If the jid parameter is not provided, a new client will be created.
@@ -2637,8 +2637,8 @@ class ClientFactory:
             # you must at least provide a uuid to make sure the client is unique
             raise Exception("JID and UUID cannot be none")
 
-        client = NewClient(self.database_name, jid, props, uuid)
-        client.event.list_func = self.event
+        client = NewClient(self.database_name, jid, props, uuid, new_client)
+        client.event.list_func = self.event.list_func
         self.clients.append(client)
         return client
 
