@@ -19,7 +19,7 @@ include = [
 
 [tool.poetry.dependencies]
 python = ">=3.10"
-protobuf = "^4.25.1"
+protobuf = "^5.26.0"
 pillow = "^10.1.0"
 requests = "^2.31.0"
 phonenumbers = "^8.13.27"
