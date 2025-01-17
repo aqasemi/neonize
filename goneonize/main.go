@@ -166,6 +166,7 @@ func Neonize(db *C.char, id *C.char, JIDByte *C.uchar, JIDSize C.int, logLevel *
 		} else {
 			deviceStore, err_device = container.GetFirstDevice()
 		}
+	}
 	if err_device != nil {
 		panic(err_device)
 	}
