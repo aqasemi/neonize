@@ -1,6 +1,5 @@
 # class InvalidInviteLink(Exception):
 #     pass
-from re import L
 
 
 class UploadError(Exception):
@@ -240,4 +239,8 @@ class GetChatSettingsError(Exception):
 
 
 class SendPresenceError(Exception):
+    pass
+
+
+class DecryptPollVoteError(Exception):
     pass

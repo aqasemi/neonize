@@ -1,18 +1,15 @@
 import ctypes
 import os
 from platform import system
-import importlib.metadata
 from typing import Any
 from pathlib import Path
+from .utils.platform import generated_name
+from .download import download, __GONEONIZE_VERSION__
 
 func_string = ctypes.CFUNCTYPE(None, ctypes.c_void_p)
 func = ctypes.CFUNCTYPE(None, ctypes.c_void_p)
 func_bytes = ctypes.CFUNCTYPE(None, ctypes.c_void_p, ctypes.c_int)
-func_callback_bytes = ctypes.CFUNCTYPE(
-    None, ctypes.c_void_p, ctypes.c_int, ctypes.c_int
-)
-from .utils.platform import generated_name
-from .download import download, __GONEONIZE_VERSION__
+func_callback_bytes = ctypes.CFUNCTYPE(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_int)
 
 
 def load_goneonize():
@@ -95,7 +92,13 @@ if not os.environ.get("SPHINX"):
         ctypes.c_char_p,
         ctypes.c_int,
     ]
-    gocode.SetGroupPhoto.restype = ctypes.c_char_p
+    gocode.SetGroupPhoto.restype = Bytes
+    gocode.SetProfilePhoto.argtypes = [
+        ctypes.c_char_p,
+        ctypes.c_char_p,
+        ctypes.c_int,
+    ]
+    gocode.SetProfilePhoto.restype = Bytes
     gocode.LeaveGroup.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_int]
     gocode.LeaveGroup.restype = ctypes.c_char_p
     gocode.SetGroupName.argtypes = [
@@ -469,5 +472,7 @@ if not os.environ.get("SPHINX"):
     gocode.SendFBMessage.restype = Bytes
     gocode.SendPresence.argtypes = [ctypes.c_char_p, ctypes.c_char_p]
     gocode.SendPresence.restype = ctypes.c_char_p
+    gocode.DecryptPollVote.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_int]
+    gocode.DecryptPollVote.restype = Bytes
 else:
     gocode: Any = object()

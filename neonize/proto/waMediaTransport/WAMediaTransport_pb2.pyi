@@ -270,12 +270,14 @@ class VideoTransport(google.protobuf.message.Message):
         WIDTH_FIELD_NUMBER: builtins.int
         SIDECAR_FIELD_NUMBER: builtins.int
         GIFATTRIBUTION_FIELD_NUMBER: builtins.int
+        ACCESSIBILITYLABEL_FIELD_NUMBER: builtins.int
         seconds: builtins.int
         gifPlayback: builtins.bool
         height: builtins.int
         width: builtins.int
         sidecar: builtins.bytes
         gifAttribution: global___VideoTransport.Ancillary.Attribution.ValueType
+        accessibilityLabel: builtins.str
         @property
         def caption(self) -> waCommon.WACommon_pb2.MessageText: ...
         def __init__(
@@ -288,9 +290,10 @@ class VideoTransport(google.protobuf.message.Message):
             width: builtins.int | None = ...,
             sidecar: builtins.bytes | None = ...,
             gifAttribution: global___VideoTransport.Ancillary.Attribution.ValueType | None = ...,
+            accessibilityLabel: builtins.str | None = ...,
         ) -> None: ...
-        def HasField(self, field_name: typing.Literal["caption", b"caption", "gifAttribution", b"gifAttribution", "gifPlayback", b"gifPlayback", "height", b"height", "seconds", b"seconds", "sidecar", b"sidecar", "width", b"width"]) -> builtins.bool: ...
-        def ClearField(self, field_name: typing.Literal["caption", b"caption", "gifAttribution", b"gifAttribution", "gifPlayback", b"gifPlayback", "height", b"height", "seconds", b"seconds", "sidecar", b"sidecar", "width", b"width"]) -> None: ...
+        def HasField(self, field_name: typing.Literal["accessibilityLabel", b"accessibilityLabel", "caption", b"caption", "gifAttribution", b"gifAttribution", "gifPlayback", b"gifPlayback", "height", b"height", "seconds", b"seconds", "sidecar", b"sidecar", "width", b"width"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing.Literal["accessibilityLabel", b"accessibilityLabel", "caption", b"caption", "gifAttribution", b"gifAttribution", "gifPlayback", b"gifPlayback", "height", b"height", "seconds", b"seconds", "sidecar", b"sidecar", "width", b"width"]) -> None: ...
 
     @typing.final
     class Integral(google.protobuf.message.Message):
@@ -529,6 +532,7 @@ class StickerTransport(google.protobuf.message.Message):
         MUSTACHETEXT_FIELD_NUMBER: builtins.int
         ISTHIRDPARTY_FIELD_NUMBER: builtins.int
         RECEIVERFETCHID_FIELD_NUMBER: builtins.int
+        ACCESSIBILITYLABEL_FIELD_NUMBER: builtins.int
         pageCount: builtins.int
         height: builtins.int
         width: builtins.int
@@ -537,6 +541,7 @@ class StickerTransport(google.protobuf.message.Message):
         mustacheText: builtins.str
         isThirdParty: builtins.bool
         receiverFetchID: builtins.str
+        accessibilityLabel: builtins.str
         def __init__(
             self,
             *,
@@ -548,9 +553,10 @@ class StickerTransport(google.protobuf.message.Message):
             mustacheText: builtins.str | None = ...,
             isThirdParty: builtins.bool | None = ...,
             receiverFetchID: builtins.str | None = ...,
+            accessibilityLabel: builtins.str | None = ...,
         ) -> None: ...
-        def HasField(self, field_name: typing.Literal["firstFrameLength", b"firstFrameLength", "firstFrameSidecar", b"firstFrameSidecar", "height", b"height", "isThirdParty", b"isThirdParty", "mustacheText", b"mustacheText", "pageCount", b"pageCount", "receiverFetchID", b"receiverFetchID", "width", b"width"]) -> builtins.bool: ...
-        def ClearField(self, field_name: typing.Literal["firstFrameLength", b"firstFrameLength", "firstFrameSidecar", b"firstFrameSidecar", "height", b"height", "isThirdParty", b"isThirdParty", "mustacheText", b"mustacheText", "pageCount", b"pageCount", "receiverFetchID", b"receiverFetchID", "width", b"width"]) -> None: ...
+        def HasField(self, field_name: typing.Literal["accessibilityLabel", b"accessibilityLabel", "firstFrameLength", b"firstFrameLength", "firstFrameSidecar", b"firstFrameSidecar", "height", b"height", "isThirdParty", b"isThirdParty", "mustacheText", b"mustacheText", "pageCount", b"pageCount", "receiverFetchID", b"receiverFetchID", "width", b"width"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing.Literal["accessibilityLabel", b"accessibilityLabel", "firstFrameLength", b"firstFrameLength", "firstFrameSidecar", b"firstFrameSidecar", "height", b"height", "isThirdParty", b"isThirdParty", "mustacheText", b"mustacheText", "pageCount", b"pageCount", "receiverFetchID", b"receiverFetchID", "width", b"width"]) -> None: ...
 
     @typing.final
     class Integral(google.protobuf.message.Message):

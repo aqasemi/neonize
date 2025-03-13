@@ -57,9 +57,7 @@ async def get_bytes_from_name_or_url_async(args: typing.Union[str, bytes]) -> by
         return args
 
 
-def write_from_bytesio_or_filename(
-    fn_or_bytesio: typing.Union[io.BytesIO, str], data: bytes
-):
+def write_from_bytesio_or_filename(fn_or_bytesio: typing.Union[io.BytesIO, str], data: bytes):
     """Writes bytes to either a BytesIO object or a file specified by its name.
 
     :param fn_or_bytesio: Either a BytesIO object or the name of the file to write data to.
@@ -96,11 +94,11 @@ class TemporaryFile:
         :type touch: bool, optional
         """
         params = {}
-        if prefix != None:
+        if prefix is not None:
             params["prefix"] = prefix
-        if suffix != None:
+        if suffix is not None:
             params["suffix"] = suffix
-        if dir != None:
+        if dir is not None:
             params["dir"] = dir
         self.path = Path(tempfile.mktemp(**params))
         if touch:
@@ -111,7 +109,4 @@ class TemporaryFile:
 
     def __exit__(self, exc_type, exc_value, traceback):
         os.remove(self.path)
-        log.debug(
-            "exc_type: %r, exc_value: %r, traceback: %r"
-            % (exc_type, exc_value, traceback)
-        )
+        log.debug("exc_type: %r, exc_value: %r, traceback: %r" % (exc_type, exc_value, traceback))

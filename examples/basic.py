@@ -12,7 +12,6 @@ from neonize.events import (
     ReceiptEv,
     CallOfferEv,
 )
-from neonize.proto.Neonize_pb2 import JID
 from neonize.proto.waE2E.WAWebProtobufsE2E_pb2 import (
     Message,
     FutureProofMessage,
@@ -152,14 +151,10 @@ def handler(client: NewClient, message: MessageEv):
             metadata = client.get_newsletter_info_with_invite(
                 "https://whatsapp.com/channel/0029Va4K0PZ5a245NkngBA2M"
             )
-            data_msg = client.get_newsletter_messages(
-                metadata.ID, 2, MessageServerID(0)
-            )
+            data_msg = client.get_newsletter_messages(metadata.ID, 2, MessageServerID(0))
             client.send_message(chat, data_msg.__str__())
             for _ in data_msg:
-                client.newsletter_send_reaction(
-                    metadata.ID, MessageServerID(0), "🗿", ""
-                )
+                client.newsletter_send_reaction(metadata.ID, MessageServerID(0), "🗿", "")
         case "subscribe_channel_updates":
             metadata = client.get_newsletter_info_with_invite(
                 "https://whatsapp.com/channel/0029Va4K0PZ5a245NkngBA2M"
@@ -170,9 +165,7 @@ def handler(client: NewClient, message: MessageEv):
             metadata = client.get_newsletter_info_with_invite(
                 "https://whatsapp.com/channel/0029Va4K0PZ5a245NkngBA2M"
             )
-            client.send_message(
-                chat, client.newsletter_toggle_mute(metadata.ID, False).__str__()
-            )
+            client.send_message(chat, client.newsletter_toggle_mute(metadata.ID, False).__str__())
         case "set_diseapearing":
             client.send_message(
                 chat, client.set_default_disappearing_timer(timedelta(days=7)).__str__()
@@ -228,9 +221,19 @@ def handler(client: NewClient, message: MessageEv):
         case "put_archived_disable":
             client.chat_settings.put_archived(chat, False)
         case "get_chat_settings":
-            client.send_message(
-                chat, client.chat_settings.get_chat_settings(chat).__str__()
-            )
+            client.send_message(chat, client.chat_settings.get_chat_settings(chat).__str__())
+        case "edit_message":
+            text = "Hello World"
+            id_msg = None
+            for i in range(1, len(text) + 1):
+                if id_msg is None:
+                    msg = client.send_message(
+                        message.Info.MessageSource.Chat, Message(conversation=text[:i])
+                    )
+                    id_msg = msg.ID
+                client.edit_message(
+                    message.Info.MessageSource.Chat, id_msg, Message(conversation=text[:i])
+                )
         case "button":
             client.send_message(
                 message.Info.MessageSource.Chat,

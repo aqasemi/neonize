@@ -20,6 +20,7 @@ import (
 	"github.com/krypton-byte/neonize/utils"
 	_ "github.com/mattn/go-sqlite3"
 	"go.mau.fi/whatsmeow"
+	"go.mau.fi/whatsmeow/proto/waCompanionReg"
 	"go.mau.fi/whatsmeow/proto/waConsumerApplication"
 	"go.mau.fi/whatsmeow/proto/waMsgApplication"
 	"go.mau.fi/whatsmeow/store"
@@ -134,7 +135,7 @@ func SendMessage(id *C.char, JIDByte *C.uchar, JIDSize C.int, messageByte *C.uch
 //export Neonize
 func Neonize(db *C.char, id *C.char, JIDByte *C.uchar, JIDSize C.int, logLevel *C.char, qrCb C.ptr_to_python_function_string, logStatus C.ptr_to_python_function_string, event C.ptr_to_python_function_bytes, subscribes *C.uchar, lenSubscriber C.int, blocking C.ptr_to_python_function, devicePropsBuf *C.uchar, devicePropsSize C.int, pairphone *C.uchar, pairphoneSize C.int, newDevice C.bool) { // ,
 	subscribers := map[int]bool{}
-	var deviceProps waProto.DeviceProps
+	var deviceProps waCompanionReg.DeviceProps
 	var loginStateChan = make(chan bool)
 	err_proto := proto.Unmarshal(getByteByAddr(devicePropsBuf, devicePropsSize), &deviceProps)
 	if err_proto != nil {
@@ -910,9 +911,12 @@ func GetGroupRequestParticipants(id *C.char, JIDByte *C.uchar, JIDSize C.int) C.
 		panic(err)
 	}
 	request_participants, err_request := clients[C.GoString(id)].GetGroupRequestParticipants(utils.DecodeJidProto(&JID))
-	participants := []*defproto.JID{}
+	participants := []*defproto.GroupParticipantRequest{}
 	for _, participant := range request_participants {
-		participants = append(participants, utils.EncodeJidProto(participant))
+		participants = append(participants, &defproto.GroupParticipantRequest{
+			Participant: utils.EncodeJidProto(participant.JID),
+			TimeAt:      proto.Uint64(uint64(participant.RequestedAt.UnixMicro())),
+		})
 	}
 	return_ := defproto.GetGroupRequestParticipantsReturnFunction{
 		Participants: participants,
@@ -930,7 +934,7 @@ func GetGroupRequestParticipants(id *C.char, JIDByte *C.uchar, JIDSize C.int) C.
 //export GetLinkedGroupsParticipants
 func GetLinkedGroupsParticipants(id *C.char, JIDByte *C.uchar, JIDSize C.int) C.struct_BytesReturn {
 	var JID defproto.JID
-	return_ := defproto.GetGroupRequestParticipantsReturnFunction{}
+	return_ := defproto.ReturnFunctionWithError{}
 	err := proto.Unmarshal(getByteByAddr(JIDByte, JIDSize), &JID)
 	if err != nil {
 		panic(err)
@@ -943,7 +947,11 @@ func GetLinkedGroupsParticipants(id *C.char, JIDByte *C.uchar, JIDSize C.int) C.
 	for _, jid := range JIDS {
 		neonizeJID = append(neonizeJID, utils.EncodeJidProto(jid))
 	}
-	return_.Participants = neonizeJID
+	return_.Return = &defproto.ReturnFunctionWithError_GetLinkedGroupsParticipants{
+		GetLinkedGroupsParticipants: &defproto.JIDArray{
+			JIDS: neonizeJID,
+		},
+	}
 	return_buf, err_marshal := proto.Marshal(&return_)
 	if err_marshal != nil {
 		panic(err_marshal)
@@ -978,6 +986,24 @@ func SetGroupPhoto(id *C.char, JIDByte *C.uchar, JIDSize C.int, Photo *C.uchar, 
 	}
 	photo_buf := getByteByAddr(Photo, PhotoSize)
 	response, err_status := clients[C.GoString(id)].SetGroupPhoto(utils.DecodeJidProto(&neoJIDProto), photo_buf)
+	return_ := defproto.SetGroupPhotoReturnFunction{
+		PictureID: &response,
+	}
+	if err_status != nil {
+		return_.Error = proto.String(err_status.Error())
+	}
+	return_buf, err_marshal := proto.Marshal(&return_)
+	if err_marshal != nil {
+		panic(err_marshal)
+	}
+	return ReturnBytes(return_buf)
+}
+
+//export SetProfilePhoto
+func SetProfilePhoto(id *C.char, Photo *C.uchar, PhotoSize C.int) C.struct_BytesReturn {
+	var empty types.JID
+	photo_buf := getByteByAddr(Photo, PhotoSize)
+	response, err_status := clients[C.GoString(id)].SetGroupPhoto(empty, photo_buf)
 	return_ := defproto.SetGroupPhotoReturnFunction{
 		PictureID: &response,
 	}
@@ -1992,6 +2018,29 @@ func SendPresence(id *C.char, presence *C.char) *C.char {
 		return C.CString(err.Error())
 	}
 	return C.CString("")
+}
+
+//export DecryptPollVote
+func DecryptPollVote(id *C.char, message *C.uchar, messageSize C.int) C.struct_BytesReturn {
+	var pvmessage defproto.Message
+	return_proto := defproto.ReturnFunctionWithError{}
+	err := proto.Unmarshal(getByteByAddr(message, messageSize), &pvmessage)
+	if err != nil {
+		panic(err)
+	}
+	result, err := clients[C.GoString(id)].DecryptPollVote(utils.DecodeEventTypesMessage(&pvmessage))
+	if err != nil {
+		return_proto.Error = proto.String(err.Error())
+	} else {
+		return_proto.Return = &defproto.ReturnFunctionWithError_PollVoteMessage{
+			PollVoteMessage: result,
+		}
+	}
+	return_buf, err := proto.Marshal(&return_proto)
+	if err != nil {
+		panic(err)
+	}
+	return ReturnBytes(return_buf)
 }
 
 //export SendFBMessage
