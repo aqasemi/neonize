@@ -154,9 +154,6 @@ jobs:
         uv run task repack
         mv neonize/*.so LIBS
         cp dist/*.whl LIBS/
-        if [[ $UV_PUBLISH_TOKEN ]];then
-          uv publish
-        fi
       continue-on-error: true
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
@@ -225,9 +222,6 @@ jobs:
         uv run task repack
         mv neonize/*.so LIBS
         cp dist/*.whl LIBS/
-        if [[ $UV_PUBLISH_TOKEN ]];then
-          uv publish
-        fi
       continue-on-error: true
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
@@ -286,9 +280,6 @@ jobs:
         uv run task repack
         cp dist/*.whl LIBS/
         mv neonize/*.dylib LIBS/
-        if [[ $UV_PUBLISH_TOKEN ]];then
-          uv publish
-        fi
       continue-on-error: true
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
@@ -356,9 +347,6 @@ jobs:
       - name: push to pypi
         run: |
           export UV_PUBLISH_TOKEN=${UV_PUBLISH_TOKEN}
-          if [[ $UV_PUBLISH_TOKEN ]];then
-            uv publish
-          fi
           mkdir LIBS
           mv dist/*.whl LIBS/
         shell: alpine.sh {0}
@@ -403,6 +391,3 @@ jobs:
         tag_name: ${{ env.TAG_NAME }}
     - name: Publish
       run: |
-        if [[ $UV_PUBLISH_TOKEN ]];then
-          uv build && uv publish
-        fi
